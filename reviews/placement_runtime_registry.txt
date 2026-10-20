@@ -1,0 +1,79 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+FLE PLACEMENT RUNTIME REGISTRY
+========================================================================
+
+Registry results:
+can_place_entity: NOT FOUND
+nearest_buildable: NOT FOUND
+place_entity_next_to: NOT FOUND
+pickup_entity: NOT FOUND
+place_entity: NOT FOUND
+
+Registered placement-related tools:
+- <PROJECT_ROOT>/.venv/lib/python3.12/site-packages/fle/env/tools/agent/can_place_entity/server.lua
+- <PROJECT_ROOT>/.venv/lib/python3.12/site-packages/fle/env/tools/agent/nearest_buildable/server.lua
+- <PROJECT_ROOT>/.venv/lib/python3.12/site-packages/fle/env/tools/agent/pickup_entity/server.lua
+- <PROJECT_ROOT>/.venv/lib/python3.12/site-packages/fle/env/tools/agent/place_entity/server.lua
+- <PROJECT_ROOT>/.venv/lib/python3.12/site-packages/fle/env/tools/agent/place_entity_next_to/server.lua
+
+Client signatures:
+------------------------------------------------------------------------
+
+can_place_entity
+  module: fle.env.tools.agent.can_place_entity.client
+  class: CanPlaceEntity
+  __call__: (self, entity: fle.env.game_types.Prototype, direction: fle.env.entities.Direction = Direction.UP, position: fle.env.entities.Position = Position(x=0.0, y=0.0)) -> bool
+  documentation:
+    Tests to see if an entity can be placed at a given position
+    :param entity: Entity to place from inventory
+    :param direction: Cardinal direction to place entity
+    :param position: Position to place entity
+    :return: True if entity can be placed at position, else False
+
+nearest_buildable
+  module: fle.env.tools.agent.nearest_buildable.client
+  class: NearestBuildable
+  __call__: (self, entity: fle.env.game_types.Prototype, building_box: fle.env.entities.BuildingBox, center_position: fle.env.entities.Position, **kwargs) -> fle.env.entities.BoundingBox
+  documentation:
+    Find the nearest buildable area for an entity.
+    
+    :param entity: Prototype of the entity to build.
+    :param building_box: The building box denoting the area of location that must be placeable.
+    :param center_position: The position to find the nearest area where building box fits
+    :return: BoundingBox of the nearest buildable area or None if no such area exists.
+
+place_entity_next_to
+  module: fle.env.tools.agent.place_entity_next_to.client
+  class: PlaceEntityNextTo
+  __call__: (self, entity: fle.env.game_types.Prototype, reference_position: fle.env.entities.Position = Position(x=0.0, y=0.0), direction: fle.env.instance.DirectionInternal = <DirectionInternal.RIGHT: 4>, spacing: int = 0) -> fle.env.entities.Entity
+  documentation:
+    Places an entity next to an existing entity, with an optional space in-between (0 space means adjacent).
+    In order to place something with a gap, you must increase the spacing parameter.
+    :param entity: Entity to place
+    :param reference_position: Position of existing entity or position to place entity next to
+    :param direction: Direction to place entity from reference_position
+    :param spacing: Space between entity and reference_position
+    :example: place_entity_next_to(Prototype.WoodenChest, Position(x=0, y=0), direction=Direction.UP, spacing=1)
+    :return: Entity placed
+
+pickup_entity
+  module: fle.env.tools.agent.pickup_entity.client
+  class: PickupEntity
+  __call__: (self, entity: Union[fle.env.entities.Entity, fle.env.game_types.Prototype, fle.env.entities.EntityGroup], position: Optional[fle.env.entities.Position] = None) -> bool
+  documentation:
+    Pick up an entity if it exists on the world at a given position.
+    :param entity: Entity prototype to pickup, e.g Prototype.IronPlate
+    :param position: Position to pickup entity
+    :return: True if the entity was picked up successfully, False otherwise.
+
+place_entity
+  IMPORT FAILED:
+  AttributeError: module 'fle.env.tools.agent.place_entity.client' has no attribute 'PlaceEntity'
+
+Interpretation:
+- REGISTERED means the environment's tool registry includes the function.
+- A valid client signature confirms the Python interface is installed.
+- If both checks pass, the next step is a short live placement validation.

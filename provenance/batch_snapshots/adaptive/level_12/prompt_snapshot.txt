@@ -1,0 +1,69 @@
+Build the highest-performing automated factory possible within the available interaction budget.
+
+Prioritize sustained automated production over manual production, inventory accumulation, isolated construction, or short-term score. Favor systems that continue producing without repeated manual intervention.
+
+
+
+Treat failed actions as evidence. Before retrying a failed placement, crafting, insertion, or extraction action, inspect the inventory and relevant entities and verify that every prerequisite is available. Do not repeat substantially the same failed action more than twice by merely changing coordinates or quantities. If the cause remains unresolved, abandon that attempt temporarily and return to productive work using the functioning factory while gathering, crafting, or identifying the missing prerequisite.
+
+When placing an entity that is already present in inventory, do not guess or manually adjust placement coordinates. Use nearest_buildable to find a valid location and preserve the returned coordinates exactly. Use can_place_entity to verify that exact location before calling place_entity. When an entity must be adjacent to existing infrastructure, use place_entity_next_to instead. After one failed placement, stop manually changing coordinates; inspect the inventory and entities, then return to productive work unless the relevant state has materially changed.
+
+PLACEMENT PROCEDURE:
+
+Before placement, inspect inventory and confirm that the intended entity is
+present. If it is absent, gather materials, craft it, or continue productive
+work instead.
+
+Never invent, round, or manually shift placement coordinates.
+
+For a standalone entity, follow this pattern:
+
+position = nearest_buildable(Prototype.StoneFurnace)
+if can_place_entity(Prototype.StoneFurnace, position=position):
+    place_entity(Prototype.StoneFurnace, position=position)
+
+StoneFurnace is only an example. Substitute the Prototype for the entity
+required by the current objective.
+
+For an entity that must be adjacent to existing infrastructure, retrieve the
+existing entity and use place_entity_next_to with its position. Preserve all
+returned coordinates exactly.
+
+If the helper-based procedure does not produce a successful placement, stop
+that placement objective. Do not retry by guessing different coordinates.
+Return to harvesting, crafting, fueling, inserting, extracting, or expanding a
+functioning production process.
+
+EXECUTE THE STATED ACTION:
+
+When you state an action in your plan, the executable code must perform that
+action during the same turn whenever its prerequisites are already known.
+
+Inspect only when information required for the next action is unknown. After
+inspection identifies the required inventory, entity, resource, or factory
+state, the next turn must change that state through harvesting, crafting,
+placement, insertion, extraction, research, or another productive operation.
+
+Do not repeat the same inspection without an intervening state-changing action.
+If you state that you will insert an item, call insert_item. If you state that
+you will extract an item, call extract_item. If you state that you will craft
+or place something, call the corresponding function after confirming its
+prerequisites.
+
+If two consecutive turns do not change production, inventory, infrastructure,
+or research progress, stop the current objective and choose a different
+productive action.
+
+If an action fails twice, stop retrying it and switch to productive work. Do not treat changing coordinates, quantities, or other minor details as a different action. Return to the failed objective only after the inventory or game state has meaningfully changed.
+
+Once basic production is functioning, shift from repeated maintenance and manual gathering to one long-term factory-development objective. Choose the next achievable capability, such as copper processing, power generation, research, logistics, or automated manufacturing, and carry that objective forward across turns until it is completed or materially blocked. Preserve functioning production, but do not spend repeated turns servicing it unless a real shortage or blockage has stopped output.
+
+At the beginning of each turn, state one current long-term factory-development objective. Keep the same objective until it is completed or materially blocked, and make the executable action advance that objective or one of its required prerequisites. Routine inspection, manual gathering, or servicing existing furnaces does not count as progress unless it directly supports the declared objective. If the objective changes, clearly state why.
+
+The earlier requirement to state the long-term objective at the beginning of every turn no longer applies. Choose one long-term factory-development objective and keep working toward it until it is completed or materially blocked. State the objective only when selecting or changing it. Each executable action should advance that objective, complete a necessary prerequisite, or maintain production that has actually stopped. If the objective becomes blocked after two failed attempts, switch to productive prerequisite work instead of repeating the failure.
+
+Your current long-term objective is to establish copper-plate production. Keep this objective until at least one copper plate has been successfully produced. Each action should advance this objective or complete a required prerequisite. Service existing iron production only if it has stopped; do not expand iron production or replace the copper objective with another goal. If an action fails twice, change the method or address a missing prerequisite before trying again.
+
+First establish copper-plate production and confirm that at least one copper plate has been produced. Then immediately shift the long-term objective to establishing functioning steam power. Obtain and connect the required offshore pump, boiler, steam engine, pipes, fuel, and related prerequisites. Treat steam power as complete only when at least one steam engine is actively producing electricity. Maintain earlier production only when needed for the power objective; do not continue expanding iron or copper after they can supply the required materials. If an action fails twice, change the method or address a missing prerequisite before trying again.
+
+Once at least one copper plate has been produced, treat copper production as complete. On the next turn, stop expanding copper production and take an executable action toward steam power. Do not harvest more copper, add copper furnaces, or service copper equipment unless a specific missing steam-power prerequisite requires it. Continue working through the offshore pump, boiler, steam engine, pipes, and fuel until at least one steam engine is producing electricity. If the same action fails twice, change the method or address a missing prerequisite before retrying.

@@ -1,0 +1,45 @@
+ADAPTIVE REVIEW: RECOVERED LEVEL 4 TO LEVEL 5
+
+Level 4 results:
+- Mean production score: 4,983.33
+- Mean automated production score: 1,642.67
+- Mean errors: 11.67
+- Mean longest error streak: 3.00
+- Mean productive turns: 120.67
+- Mean productive-turn rate: 80.4%
+
+Change from recovered Level 3:
+- Production remained essentially stable, decreasing 0.7%.
+- Automated production increased 6.7%.
+- Errors decreased 75.7%.
+- Longest error streak decreased 90.4%.
+- Productive turns increased 33.1%.
+- Production and automation became substantially more consistent.
+
+What worked:
+- Placement errors fell from 84 at Level 3 to 3 at Level 4.
+- Runs 1 and 2 remained productive during 86% of their turns.
+- All three runs avoided long consecutive error loops.
+- The model generally preserved and serviced functioning production.
+
+What did not work:
+- The model made no recorded calls to nearest_buildable,
+  can_place_entity, or place_entity_next_to.
+- Inventory errors represented 22 of 35 total errors.
+- The model frequently inspected state without performing the action described
+  in its plan.
+- Run 3 repeated essentially the same inspection pattern for 38 turns.
+- During the end of Run 3, the model repeatedly stated that it would insert
+  iron ore but called only inspection functions.
+- The final eight turns of Run 3 produced no additional score.
+
+Root-cause interpretation:
+The dominant problem has shifted from placement failure to execution
+follow-through. The model often identifies the correct next action but does not
+include the corresponding state-changing API call in its program.
+
+Level 5 decision:
+Require direct alignment between the stated plan and executable code. Limit
+repeated inspection and require the model to change objectives after two
+consecutive turns without meaningful state progress. Keep the underlying tool
+context unchanged to preserve comparability with previous experimental levels.

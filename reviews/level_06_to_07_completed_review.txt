@@ -1,0 +1,28 @@
+ADAPTIVE REVIEW: LEVEL 6 TO LEVEL 7
+
+Observed problem:
+Across adaptive Levels 1–6, 1,037 placement failures with coordinates were
+identified. Of these, 635 failures, or 61.2%, used coordinates that were
+incompatible with the placement grid for the selected entity.
+
+Diagnostic result:
+A separate 20-turn validation confirmed that nearest_buildable and
+can_place_entity are available and can guide a successful placement. The model
+used the returned location and placed a stone furnace without a placement
+exception.
+
+What worked:
+- The placement-helper functions executed successfully.
+- A helper-selected and validated location supported successful placement.
+- The model avoided manually guessing alternative coordinates.
+
+What did not work:
+- A lengthy mandatory validation procedure consumed too many turns.
+- The model sometimes checked placement for entities not yet in inventory.
+- Repeated validation reduced time available for productive factory activity.
+
+Level 7 decision:
+Add concise, conditional placement guidance. Helpers should be used only when
+the entity is already available and placement serves a productive objective.
+The returned coordinates must be preserved exactly. Validation should not be
+repeated unless the relevant game state changes.

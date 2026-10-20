@@ -1,0 +1,59 @@
+ADAPTIVE REVIEW: RECOVERED LEVEL 2 TO LEVEL 3
+=============================================
+
+Evidence source:
+experiment_runs/FLE_adaptive_L02_B20261004T140104
+
+Validity:
+The intended adaptive Level 2 prompt was found in the stored model input for
+all three runs.
+
+Level 2 results:
+- Mean production score: 2,354.33
+- Production standard deviation: 974.68
+- Mean automated production score: 562.00
+- Automated production standard deviation: 211.35
+- Mean errors per run: 76.33
+- Total errors across three runs: 229
+- Placement errors: 211, or 92.1% of all errors
+- Longest error streaks: 71, 46, and 60 turns
+- Errors during turns 101–150: 134 of 150 possible turns
+
+Comparison with valid Level 1:
+- Mean production decreased from 3,604.00 to 2,354.33, a 34.7% decrease.
+- Mean automated production decreased from 914.00 to 562.00, a 38.5% decrease.
+- Mean errors increased from 43.00 to 76.33, a 77.5% increase.
+
+What worked:
+- All three runs established functional mining and smelting.
+- The model sometimes recovered correctly from missing coal, stone, iron ore,
+  or crafted components.
+- Automated production efficiency remained reasonably consistent while the
+  factories were operating.
+
+Observed failure:
+All three runs became trapped in repeated placement attempts. The prior
+instruction to stop repeating failed actions did not provide a reliable method
+for selecting valid placement coordinates. Changing coordinates, chest types,
+or code structure did not represent meaningful recovery.
+
+Level 3 decision:
+Provide a concrete placement procedure using the available FLE placement
+helpers. Require exact preservation of helper-returned coordinates and direct
+the model to leave the placement objective after one failure unless the game
+state materially changes.
+
+Level 3 intervention:
+When placing an entity that is already present in inventory, do not guess or
+manually adjust placement coordinates. Use nearest_buildable to find a valid
+location and preserve the returned coordinates exactly. Use can_place_entity
+to verify that exact location before calling place_entity. When an entity must
+be adjacent to existing infrastructure, use place_entity_next_to instead.
+After one failed placement, stop manually changing coordinates; inspect the
+inventory and entities, then return to productive work unless the relevant
+state has materially changed.
+
+Review rule:
+After the three recovered Level 3 runs, compare placement errors, longest error
+streaks, productive turns, production, and automated production with recovered
+Level 2 before designing Level 4.

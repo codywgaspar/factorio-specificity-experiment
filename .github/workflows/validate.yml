@@ -1,0 +1,37 @@
+name: Validate released package
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pandas numpy openpyxl
+      - run: python -m py_compile experiments/*.py scripts/*.py
+      - run: python scripts/rebuild_summary.py
+      - name: Compare recreated summaries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path(".")
+          for name in ("final_arm_comparison.csv", "final_level_comparison.csv"):
+              released = pd.read_csv(root / "data" / "final" / name)
+              rebuilt = pd.read_csv(root / "reproduced_results" / name)
+              pd.testing.assert_frame_equal(
+                  released,
+                  rebuilt,
+                  check_exact=False,
+                  rtol=1e-10,
+                  atol=1e-10,
+              )
+              print(f"PASS: {name}")
+          PY
+

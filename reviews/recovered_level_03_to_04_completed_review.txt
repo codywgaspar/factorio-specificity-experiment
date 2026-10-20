@@ -1,0 +1,39 @@
+ADAPTIVE REVIEW: RECOVERED LEVEL 3 TO LEVEL 4
+
+Level 3 results:
+- Mean production score: 5,020
+- Mean automated production score: 1,539
+- Mean errors: 48
+- Mean longest error streak: 31.33
+- Mean productive turns: 90.67
+
+Change from recovered Level 2:
+- Production increased 113.2%.
+- Automated production increased 173.8%.
+- Errors decreased 37.1%.
+- Longest error streak decreased 46.9%.
+
+What worked:
+- Two runs maintained strong production by harvesting resources and servicing
+  working furnaces.
+- One run completed without any placement errors.
+- Overall production and automation were the strongest adaptive results so far.
+
+What went wrong:
+- Placement behavior remained inconsistent.
+- Two runs entered chest-placement loops.
+- One run produced zero score during its final 50 turns.
+- The model made no recorded calls to nearest_buildable,
+  can_place_entity, or place_entity_next_to, despite those tools being named
+  in the Level 3 instruction.
+
+Root-cause interpretation:
+Naming the placement helpers was insufficient. The model needs short,
+executable syntax showing how the helpers connect to place_entity. Manual
+coordinate guessing remains the primary cause of placement deadlocks.
+
+Level 4 decision:
+Provide an explicit helper-based placement procedure. Require exact preservation
+of helper-returned coordinates and abandonment of the objective if the procedure
+fails. Retain productive fallback actions so placement failure does not stop the
+factory.
